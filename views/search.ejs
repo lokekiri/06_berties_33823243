@@ -6,10 +6,17 @@
   </head>
   <body>
     <h1>Search <%=shopData.shopName%></h1>
-    <form action="search_result" method="GET">
+    <form action="/books/search-result" method="GET">
       <p>What book do you want?</p>
-      <input id="search-box" type="text" name="search_text">
-      <input type="submit" value="Search" >
+      <input id="search-box" type="text" name="keyword" required>
+      <input type="submit" value="Exact Search">
     </form>
+
+    <form action="/books/search-result-advanced" method="GET" style="margin-top: 10px;">
+      <p>Or try a partial match search:</p>
+      <input id="search-box-advanced" type="text" name="keyword" required>
+      <input type="submit" value="Partial Search">
+    </form>
+    <p><a href="/books/list">Back to all books</a></p>
   </body>
 </html>

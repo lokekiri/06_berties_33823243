@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Search Results for "<%= keyword %>"</title>
+    <link rel="stylesheet" type="text/css" href="/main.css" />
+  </head>
+  <body>
+    <h1>Search Results for "<%= keyword %>"</h1>
+    
+    <% if (searchResults.length === 0) { %>
+      <p>No books found.</p>
+    <% } else { %>
+      <ul>
+        <% searchResults.forEach(function(book) { %>
+          <li><%= book.name %> - £<%= book.price %></li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <p><a href="/books/search">Back to search</a></p>
+    <p><a href="/books/list">Back to all books</a></p>
+  </body>
+</html>
