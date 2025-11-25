@@ -4,12 +4,20 @@ const router = express.Router()
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+const redirectLogin = (req, res, next) => {
+    if (!req.session.userId) {
+        res.redirect('./login');   // if not logged in → redirect to login
+    } else { 
+        next();                    // logged in → continue
+    }
+};
+
 router.get('/register', function (req, res, next) {
     res.render('register.ejs')
 });
 
 // List all users (excluding passwords)
-router.get('/list', function(req, res, next) {
+router.get('/list', redirectLogin, function(req, res, next) {
     let sqlquery = "SELECT username, firstname, lastname, email FROM users";
 
     db.query(sqlquery, (err, result) => {
@@ -27,7 +35,7 @@ router.get('/login', function(req, res, next) {
 });
 
 // Show audit history
-router.get('/audit', function(req, res, next) {
+router.get('/audit', redirectLogin, function(req, res, next) {
     let sqlquery = "SELECT * FROM audit ORDER BY time DESC";
 
     db.query(sqlquery, (err, result) => {
@@ -104,7 +112,7 @@ router.post('/loggedin', function(req, res, next) {
                 // Log successful login
                 let auditSuccess = "INSERT INTO audit (username, status) VALUES (?, 'success')";
                 db.query(auditSuccess, [username]);
-
+                req.session.userId = req.body.username;
                 res.send("Login successful! Welcome " + username);
             } 
             else {
