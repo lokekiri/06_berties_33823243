@@ -60,7 +60,10 @@ router.get('/logout', redirectLogin, (req, res) => {
 router.post('/registered', 
 [
     check('email').isEmail(),
-    check('username').isLength({ min: 5, max: 20 })
+    check('username').isLength({ min: 5, max: 20 }),
+    check('password').isLength({ min: 8 }),
+    check('first').notEmpty(),
+    check('last').notEmpty(),
 ],
  function(req, res, next) {
 
