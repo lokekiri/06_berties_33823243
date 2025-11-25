@@ -14,6 +14,13 @@
 </head>
 <body>
     <h1>Add a Book</h1>
+    <% if (typeof errors !== 'undefined') { %>
+        <ul style="color:red;">
+            <% errors.forEach(e => { %>
+                <li><%= e.msg %></li>
+            <% }) %>
+        </ul>
+        <% } %>        
     <form action="/books/bookadded" method="POST">
         <label for="name">Book Name:</label>
         <input type="text" id="name" name="name" required>

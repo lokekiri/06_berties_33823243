@@ -62,8 +62,15 @@ router.get('/search-result-advanced', function (req, res, next) {
 });
 
 
-router.post('/bookadded', function(req, res, next) {
-    // saving data in database
+router.post('/bookadded', [
+    check('name').notEmpty().withMessage('Book name cannot be empty.'),
+    check('price').isFloat({ min: 0 }).withMessage('Price must be a number.')
+],
+ function(req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('addbook', { errors: errors.array() });
+    }
     let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)";
     let newrecord = [req.body.name, req.body.price];
     db.query(sqlquery, newrecord, (err, result) => {
