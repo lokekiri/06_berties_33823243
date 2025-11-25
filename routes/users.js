@@ -7,7 +7,7 @@ const { check, validationResult } = require('express-validator');
 
 const redirectLogin = (req, res, next) => {
     if (!req.session.userId) {
-        res.redirect('/users/login');   
+        res.redirect('../users/login');   
     } else { 
         next();                   
     }
@@ -51,7 +51,7 @@ router.get('/audit', redirectLogin, function(req, res, next) {
 router.get('/logout', redirectLogin, (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            return res.redirect('/users/login');
+            return res.redirect('../users/login');
         }
         res.send("You are now logged out. <a href='../'>Home</a>");
     });
