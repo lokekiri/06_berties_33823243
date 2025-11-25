@@ -33,6 +33,16 @@ const db = mysql.createPool({
 });
 global.db = db;
 
+// Create session
+app.use(session({
+    secret: 'somerandomstuff',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000   // 10 min
+    }
+}));
+
 // Load the route handlers
 const mainRoutes = require("./routes/main")
 app.use('/', mainRoutes)
