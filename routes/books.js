@@ -38,26 +38,34 @@ router.get('/bargainbooks', redirectLogin, function(req, res, next) {
 
 // Basic search (exact match)
 router.get('/search-result', function (req, res, next) {
-    const keyword = req.query.keyword;
-    let sqlquery = "SELECT name, price FROM books WHERE name = ?"; // exact match
+    const keyword = req.sanitize(req.query.keyword);   // SANITISE
+
+    let sqlquery = "SELECT name, price FROM books WHERE name = ?"; 
     db.query(sqlquery, [keyword], (err, result) => {
         if (err) {
             next(err);
         } else {
-            res.render("search-result.ejs", { searchResults: result, keyword: keyword });
+            res.render("search-result.ejs", { 
+                searchResults: result, 
+                keyword: keyword 
+            });
         }
     });
 });
 
 // Advanced search (partial match)
 router.get('/search-result-advanced', function (req, res, next) {
-    const keyword = req.query.keyword;
-    let sqlquery = "SELECT name, price FROM books WHERE name LIKE ?"; // partial match
+    const keyword = req.sanitize(req.query.keyword);   // SANITISE
+
+    let sqlquery = "SELECT name, price FROM books WHERE name LIKE ?";
     db.query(sqlquery, [`%${keyword}%`], (err, result) => {
         if (err) {
             next(err);
         } else {
-            res.render("search-result.ejs", { searchResults: result, keyword: keyword });
+            res.render("search-result.ejs", { 
+                searchResults: result, 
+                keyword: keyword 
+            });
         }
     });
 });
@@ -72,6 +80,8 @@ router.post('/bookadded', [
     if (!errors.isEmpty()) {
         return res.render('addbook', { errors: errors.array() });
     }
+    const cleanName = req.sanitize(req.body.name);  
+    const price = req.body.price;                   
     let sqlquery = "INSERT INTO books (name, price) VALUES (?,?)";
     let newrecord = [req.body.name, req.body.price];
     db.query(sqlquery, newrecord, (err, result) => {
