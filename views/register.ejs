@@ -6,6 +6,16 @@
   </head>
   <body>
     <h1>Register for <%=shopData.shopName%></h1>
+    <% if (typeof errors !== 'undefined' && errors.length > 0) { %>
+      <div style="background:#ffdddd; border:1px solid #ff4444; padding:10px;">
+          <h3>There were errors with your submission:</h3>
+          <ul>
+              <% errors.forEach(function(error) { %>
+                  <li><%= error.msg %></li>
+              <% }) %>
+          </ul>
+      </div>
+    <% } %>  
     <form action="/users/registered" method="POST">
       <p>First name:</p>
       <input type="text" name="first" required>

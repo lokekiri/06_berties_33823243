@@ -59,17 +59,25 @@ router.get('/logout', redirectLogin, (req, res) => {
 
 router.post('/registered', 
 [
-    check('email').isEmail(),
-    check('username').isLength({ min: 5, max: 20 }),
-    check('password').isLength({ min: 8 }),
-    check('first').notEmpty(),
-    check('last').notEmpty(),
+    check('email').isEmail().withMessage('Email must be a valid email address.'),
+    check('username')
+        .isLength({ min: 5, max: 20 })
+        .withMessage('Username must be between 5 and 20 characters.'),
+    check('password')
+        .isLength({ min: 8 })
+        .withMessage('Password must be at least 8 characters long.'),
+    check('first')
+        .notEmpty()
+        .withMessage('First name cannot be empty.'),
+    check('last')
+        .notEmpty()
+        .withMessage('Last name cannot be empty.')
 ],
  function(req, res, next) {
 
     const errors = validationResult(req);
 if (!errors.isEmpty()) {
-    return res.render('./register'); 
+    return res.render('register', { errors: errors.array() }); 
 }
 
     const username = req.body.username;
