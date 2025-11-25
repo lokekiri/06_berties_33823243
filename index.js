@@ -5,6 +5,9 @@ var session = require('express-session');
 const path = require('path');
 var mysql = require('mysql2');
 
+//Express sanitizer
+const expressSanitizer = require('express-sanitizer');
+
 // Create the express application object
 const app = express()
 const port = 8000
@@ -14,6 +17,9 @@ app.set('view engine', 'ejs')
 
 // Set up the body parser 
 app.use(express.urlencoded({ extended: true }))
+
+// Activate sanitizer
+app.use(expressSanitizer());
 
 // Set up public folder (for css and static js)
 app.use(express.static(path.join(__dirname, 'public')))

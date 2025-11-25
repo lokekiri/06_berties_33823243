@@ -73,53 +73,46 @@ router.post('/registered',
         .notEmpty()
         .withMessage('Last name cannot be empty.')
 ],
- function(req, res, next) {
+function(req, res, next) {
 
     const errors = validationResult(req);
-if (!errors.isEmpty()) {
-    return res.render('register', { errors: errors.array() }); 
-}
+    if (!errors.isEmpty()) {
+        return res.render('register', { errors: errors.array() });
+    }
 
-    const username = req.body.username;
-    const plainPassword = req.body.password;
+    const username = req.sanitize(req.body.username);
+    const first = req.sanitize(req.body.first);
+    const last = req.sanitize(req.body.last);
+    const email = req.sanitize(req.body.email);
+    const plainPassword = req.body.password; 
 
     let checkUser = "SELECT * FROM users WHERE username = ?";
 
     db.query(checkUser, [username], (err, results) => {
-        if (err) { 
-            return next(err); 
-        }
+        if (err) return next(err);
 
         if (results.length > 0) {
             return res.send("Username already taken. Please choose another.");
         }
 
         bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
-            if (err) {
-                return next(err);
-            }
+            if (err) return next(err);
 
-            let sqlquery = "INSERT INTO users (username, firstname, lastname, email, hashedPassword) VALUES (?,?,?,?,?)";
+            let sqlquery =
+                "INSERT INTO users (username, firstname, lastname, email, hashedPassword) VALUES (?,?,?,?,?)";
 
-            let newrecord = [
-                req.body.username,
-                req.body.first,
-                req.body.last,
-                req.body.email,
-                hashedPassword
-            ];
+            let newrecord = [username, first, last, email, hashedPassword];
 
             db.query(sqlquery, newrecord, (err, result) => {
-                if (err) {
-                    return next(err);
-                } else {
-                    let response = '';
-                    response += 'Hello ' + req.body.first + ' ' + req.body.last + ', you are now registered!<br>';
-                    response += 'We will send an email to ' + req.body.email + '<br><br>';
-                    response += 'Your password is: ' + req.body.password + '<br>';
-                    response += 'Your hashed password is: ' + hashedPassword + '<br><br>';
-                    res.send(response);
-                }
+                if (err) return next(err);
+
+                let response = '';
+                response += `Hello ${first} ${last}, you are now registered!<br>`;
+                response += `We will send an email to ${email}<br><br>`;
+                response += `Your password is: ${plainPassword}<br>`;
+                response += `Your hashed password is: ${hashedPassword}<br><br>`;
+
+                res.send(response);
             });
         });
     });
