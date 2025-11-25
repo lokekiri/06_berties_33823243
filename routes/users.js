@@ -47,6 +47,15 @@ router.get('/audit', redirectLogin, function(req, res, next) {
     });
 });
 
+router.get('/logout', redirectLogin, (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('./');
+        }
+        res.send("You are now logged out. <a href='../'>Home</a>");
+    });
+});
+
 router.post('/registered', function(req, res, next) {
 
     const username = req.body.username;

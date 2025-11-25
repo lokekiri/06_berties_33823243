@@ -24,7 +24,7 @@ router.get('/addbook', function(req, res, next) {
 });
 
 // Route to show books under £20
-router.get('/bargainbooks', function(req, res, next) {
+router.get('/bargainbooks', redirectLogin, function(req, res, next) {
     let sqlquery = "SELECT name, price FROM books WHERE price < 20"; // SQL query for bargain books
     db.query(sqlquery, (err, result) => {
         if (err) {
