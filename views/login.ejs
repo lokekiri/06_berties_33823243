@@ -6,7 +6,13 @@
   </head>
   <body>
     <h1>Login</h1>
-
+    <% if (typeof errors !== 'undefined') { %>
+      <ul style="color:red;">
+          <% errors.forEach(e => { %>
+              <li><%= e.msg %></li>
+          <% }) %>
+      </ul>
+      <% } %>      
     <form action="/users/loggedin" method="POST">
       <p>Username:</p>
       <input type="text" name="username" required>

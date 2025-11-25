@@ -126,7 +126,16 @@ if (!errors.isEmpty()) {
 });
 
 // Handle login form
-router.post('/loggedin', function(req, res, next) {
+router.post('/loggedin', [
+    check('username').notEmpty().withMessage('Username cannot be empty.'),
+    check('password').notEmpty().withMessage('Password cannot be empty.')
+], 
+function(req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.render('login', { errors: errors.array() });
+    }
+
     const username = req.body.username;
     const password = req.body.password;
 
