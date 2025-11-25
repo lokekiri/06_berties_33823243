@@ -1,7 +1,8 @@
 // Import express and ejs
-var express = require ('express')
-var ejs = require('ejs')
-const path = require('path')
+var express = require ('express');
+var ejs = require('ejs');
+var session = require('express-session');
+const path = require('path');
 var mysql = require('mysql2');
 
 // Create the express application object
