@@ -48,33 +48,48 @@ router.get('/audit', redirectLogin, function(req, res, next) {
 });
 
 router.post('/registered', function(req, res, next) {
+
+    const username = req.body.username;
     const plainPassword = req.body.password;
 
-    bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
-        if (err) {
-            next(err);
+    let checkUser = "SELECT * FROM users WHERE username = ?";
+
+    db.query(checkUser, [username], (err, results) => {
+        if (err) { 
+            return next(err); 
         }
 
-        let sqlquery = "INSERT INTO users (username, firstname, lastname, email, hashedPassword) VALUES (?,?,?,?,?)";
-        let newrecord = [
-            req.body.username,
-            req.body.first,
-            req.body.last,
-            req.body.email,
-            hashedPassword
-        ];
+        if (results.length > 0) {
+            return res.send("Username already taken. Please choose another.");
+        }
 
-        db.query(sqlquery, newrecord, (err, result) => {
+        bcrypt.hash(plainPassword, saltRounds, function(err, hashedPassword) {
             if (err) {
-                next(err);
-            } else {
-                let response = '';
-                response += 'Hello ' + req.body.first + ' ' + req.body.last + ', you are now registered!<br>';
-                response += 'We will send an email to ' + req.body.email + '<br><br>';
-                response += 'Your password is: ' + req.body.password + '<br>';
-                response += 'Your hashed password is: ' + hashedPassword + '<br><br>';
-                res.send(response);
+                return next(err);
             }
+
+            let sqlquery = "INSERT INTO users (username, firstname, lastname, email, hashedPassword) VALUES (?,?,?,?,?)";
+
+            let newrecord = [
+                req.body.username,
+                req.body.first,
+                req.body.last,
+                req.body.email,
+                hashedPassword
+            ];
+
+            db.query(sqlquery, newrecord, (err, result) => {
+                if (err) {
+                    return next(err);
+                } else {
+                    let response = '';
+                    response += 'Hello ' + req.body.first + ' ' + req.body.last + ', you are now registered!<br>';
+                    response += 'We will send an email to ' + req.body.email + '<br><br>';
+                    response += 'Your password is: ' + req.body.password + '<br>';
+                    response += 'Your hashed password is: ' + hashedPassword + '<br><br>';
+                    res.send(response);
+                }
+            });
         });
     });
 });
