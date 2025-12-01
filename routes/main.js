@@ -16,7 +16,8 @@ router.get('/weather', function (req, res, next) {
 
     let city = req.query.city || "London";
     let apiKey = ''; //its on VM not github dont want it 2 b stolen
-    let url = ``; // same as above
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+
 
     request(url, function (err, response, body) {
         if (err) {
