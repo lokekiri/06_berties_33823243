@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Weather Search</title>
-    <link rel="stylesheet" type="text/css" href="/main.css">
+    <title>Weather</title>
 </head>
 <body>
+
     <h1>Check the Weather</h1>
 
-    <form action="weather" method="GET">
+    <form action="/weather" method="GET">
         <p>Enter a city:</p>
         <input type="text" name="city" required>
         <button type="submit">Get Weather</button>
@@ -17,12 +17,13 @@
         <h2>Weather in <%= weather.name %></h2>
         <p><strong>Temperature:</strong> <%= weather.main.temp %>°C</p>
         <p><strong>Humidity:</strong> <%= weather.main.humidity %>%</p>
-        <p><strong>Wind Speed:</strong> <%= weather.wind.speed %> m/s</p>
-        <p><strong>Condition:</strong> <%= weather.weather[0].description %></p>
+        <p><strong>Wind:</strong> <%= weather.wind.speed %> m/s</p>
+        <p><strong>Conditions:</strong> <%= weather.weather[0].description %></p>
     <% } %>
 
     <% if (error) { %>
         <p style="color:red;"><%= error %></p>
     <% } %>
+
 </body>
 </html>
