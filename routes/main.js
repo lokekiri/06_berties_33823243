@@ -47,4 +47,6 @@ router.get('/weather', function (req, res, next) {
             error: null
         });
     });
-}); // weird on vm
+});
+
+module.exports = router;
