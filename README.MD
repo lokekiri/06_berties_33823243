@@ -28,6 +28,8 @@ Passwords stored as hashed values only.
 
 Registration blocks usernames already in the database.
 
+
+
 ✔ Users Table
 
 Stores: username, firstname, lastname, email, hashedPassword.
@@ -85,3 +87,66 @@ search keywords
 Password is not sanitised.
 
 XSS tested and blocked (<script>alert("Gotcha!")</script>).
+
+
+
+
+
+✔ Weather API Integration (OpenWeatherMap)
+Added a full weather forecasting feature to Bertie’s Books using the OpenWeatherMap API.
+
+How it works
+
+Created a new route /weather inside main.js.
+
+Installed and used request to call the weather API.
+
+API returns JSON with temperature, humidity, wind speed, and weather conditions.
+
+Output is displayed using weather.ejs in a clean, readable layout.
+
+Added a link from the home page to the weather feature.
+
+
+City Search (Interactivity)
+
+Added a search form so users can enter any city.
+
+/weather reads the city from req.query.city.
+
+If no city is provided, it defaults to London.
+
+
+Additional Weather Details
+Displayed extra information:
+
+Wind speed
+
+Humidity
+
+Weather description
+
+Temperature
+
+City name
+
+
+Improved layout with basic formatting and colours via main.css.
+
+Error Handling
+Implemented robust checks to prevent crashes:
+
+Invalid city names show a friendly error message.
+
+Unexpected API responses handled safely with try/catch.
+
+If weather.main is missing, displays “No data found” instead of breaking.
+
+
+API Key Security
+
+The API key is NOT included in GitHub.
+
+A placeholder is committed in Git.
+
+The real API key is added manually only on the VM.
